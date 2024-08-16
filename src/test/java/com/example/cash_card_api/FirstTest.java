@@ -5,11 +5,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class FirstTest {
     @Test
-     void testFirst(){
+     void testSerializationWithCashCardObject(){
+
         assertThat(33).isEqualTo(32);
     }
-    @Test
-     void testSecond(){
-        assertThat(33).isEqualTo(33);
-    }
+
 }
