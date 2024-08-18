@@ -2,10 +2,12 @@ package com.example.cash_card_api;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.util.UriComponents;
+import org.springframework.web.util.UriComponentsBuilder;
+
+import java.net.URI;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/cashcards")
@@ -15,11 +17,21 @@ public class CashCardController {
 
     @GetMapping("/{id}")
     public ResponseEntity<String> getCashCardById(@PathVariable Long id){
-        CashCard cashCard = cashCardRepository.findById(id).get();
-        if (cashCard != null)
-        return ResponseEntity.ok(""+cashCard.id());
+        Optional<CashCard> cashCardOptional = cashCardRepository.findById(id);
+        if (cashCardOptional.isPresent()){
+            return ResponseEntity.ok(cashCardOptional.get().id().toString());
+        }
         return ResponseEntity.notFound().build();
+
     }
 
-
+    @PostMapping("/")
+    public ResponseEntity<Void> postCashCardById(@RequestBody CashCard expectedCashCard, UriComponentsBuilder ucb){
+       CashCard cashCard = cashCardRepository.save(expectedCashCard);
+       URI createdCashCardURI = ucb
+               .path("/cashcards/{id}")
+               .buildAndExpand(cashCard.id())
+               .toUri();
+       return ResponseEntity.created(createdCashCardURI).build();
+    }
 }

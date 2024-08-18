@@ -21,9 +21,9 @@ class CashCardApiApplicationTests {
 	}
 	@Test
 	void testGetCashCardApi (){
-		ResponseEntity<String> response = testRestTemplate.getForEntity("/cashcards/11", String.class );
+		ResponseEntity<String> response = testRestTemplate.getForEntity("/cashcards/15", String.class );
 		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
-		assertThat(response.getBody()).isEqualTo("11");
+		assertThat(response.getBody()).isEqualTo("15");
 	}
 
 
