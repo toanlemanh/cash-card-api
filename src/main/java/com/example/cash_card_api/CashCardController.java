@@ -7,6 +7,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Optional;
+
 @RestController
 @RequestMapping("/cashcards")
 public class CashCardController {
@@ -15,9 +17,10 @@ public class CashCardController {
 
     @GetMapping("/{id}")
     public ResponseEntity<String> getCashCardById(@PathVariable Long id){
-        CashCard cashCard = cashCardRepository.findById(id).get();
-        if (cashCard != null)
-        return ResponseEntity.ok(""+cashCard.id());
+        Optional<CashCard> cashCardOptional = cashCardRepository.findById(id);
+        if (cashCardOptional.isPresent()){
+            return ResponseEntity.ok(cashCardOptional.get().id().toString());
+        }
         return ResponseEntity.notFound().build();
     }
 
