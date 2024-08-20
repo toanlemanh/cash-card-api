@@ -15,6 +15,7 @@ public class CashCardController {
     @Autowired
     CashCardRepository cashCardRepository;
 
+
     @GetMapping("/{id}")
     public ResponseEntity<CashCard> getCashCardById(@PathVariable Long id){
         Optional<CashCard> cashCardOptional = cashCardRepository.findById(id);
@@ -23,6 +24,11 @@ public class CashCardController {
         }
         return ResponseEntity.notFound().build();
 
+    }
+    @GetMapping("")
+    public ResponseEntity<Iterable<CashCard>> getAllCashCards(){
+        Iterable<CashCard> cashCards = cashCardRepository.findAll();
+        return ResponseEntity.ok(cashCards);
     }
 
     @PostMapping("/")
