@@ -9,6 +9,7 @@ import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.test.annotation.DirtiesContext;
 
 import java.net.URI;
 
@@ -19,14 +20,15 @@ public class PostTests {
     @Autowired
     TestRestTemplate testRestTemplate;
 
+    @DirtiesContext
     @Test
     void testPostCashCardApi (){
         ResponseEntity<Void> response = testRestTemplate.postForEntity("/cashcards/", new CashCard(null, 90.01),Void.class);
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.CREATED);
 
-       URI location = response.getHeaders().getLocation();
-       ResponseEntity<String> getResponse = testRestTemplate.getForEntity(location, String.class);
-       assertThat(getResponse.getStatusCode()).isEqualTo(HttpStatus.OK);
+        URI location = response.getHeaders().getLocation();
+        ResponseEntity<String> getResponse = testRestTemplate.getForEntity(location, String.class);
+        assertThat(getResponse.getStatusCode()).isEqualTo(HttpStatus.OK);
 
         //additional test for data assertion in the newly created cash card
         //Using DocumentContext to read json object from the body of response
