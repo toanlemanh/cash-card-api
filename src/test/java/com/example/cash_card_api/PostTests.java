@@ -1,5 +1,7 @@
 package com.example.cash_card_api;
 
+import com.jayway.jsonpath.DocumentContext;
+import com.jayway.jsonpath.JsonPath;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -25,7 +27,14 @@ public class PostTests {
        URI location = response.getHeaders().getLocation();
        ResponseEntity<String> getResponse = testRestTemplate.getForEntity(location, String.class);
        assertThat(getResponse.getStatusCode()).isEqualTo(HttpStatus.OK);
-       assertThat(getResponse.getBody()).isEqualTo("1");
+
+        //additional test for data assertion in the newly created cash card
+        //Using DocumentContext to read json object from the body of response
+        DocumentContext documentContext = JsonPath.parse(getResponse.getBody());
+        Number id = documentContext.read("$.id");
+        Double amount = documentContext.read("$.amount");
+        assertThat(id).isNotNull();
+        assertThat(amount).isEqualTo(90.01);
 
     }
 }
