@@ -11,6 +11,7 @@ import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
+import java.security.Principal;
 import java.util.Optional;
 
 @RestController
@@ -21,8 +22,8 @@ public class CashCardController {
 
 
     @GetMapping("/{id}")
-    public ResponseEntity<CashCard> getCashCardById(@PathVariable Long id){
-        Optional<CashCard> cashCardOptional = cashCardRepository.findById(id);
+    public ResponseEntity<CashCard> getCashCardById(@PathVariable Long id, Principal principal){
+        Optional<CashCard> cashCardOptional = cashCardRepository.findByIdAndOwner(id, principal.getName());
         if (cashCardOptional.isPresent()){
             return ResponseEntity.ok(cashCardOptional.get());
         }
@@ -30,24 +31,32 @@ public class CashCardController {
 
     }
     @GetMapping("")
-    public ResponseEntity<Iterable<CashCard>> getAllCashCards(Pageable pageable){
-        Page<CashCard> cashCards = cashCardRepository.findAll(
+    public ResponseEntity<Iterable<CashCard>> getAllCashCards(Pageable pageable, Principal principal){
+        Page<CashCard> cashCards = cashCardRepository.findAllByOwner(
                 PageRequest.of(
                         pageable.getPageNumber(),
                         pageable.getPageSize(),
                         pageable.getSortOr(Sort.by(new Sort.Order(Sort.Direction.ASC, "amount")))
-                )
+                ),
+                principal.getName()
         );
+        System.out.println(cashCards);
         return ResponseEntity.ok(cashCards.getContent());
     }
+    //find by name
+
+    // sort by name
 
     @PostMapping("/")
-    public ResponseEntity<Void> postCashCardById(@RequestBody CashCard expectedCashCard, UriComponentsBuilder ucb){
-       CashCard cashCard = cashCardRepository.save(expectedCashCard);
-       URI createdCashCardURI = ucb
-               .path("/cashcards/{id}")
-               .buildAndExpand(cashCard.id())
-               .toUri();
-       return ResponseEntity.created(createdCashCardURI).build();
+    public ResponseEntity<Void> postCashCard(@RequestBody CashCard expectedCashCard, UriComponentsBuilder ucb, Principal principal){
+        if (principal != null ) {
+            CashCard cashCard = cashCardRepository.save(new CashCard(null, expectedCashCard.amount(), principal.getName()));
+            URI createdCashCardURI = ucb
+                    .path("/cashcards/{id}")
+                    .buildAndExpand(cashCard.id())
+                    .toUri();
+            return ResponseEntity.created(createdCashCardURI).build();
+        }
+       return ResponseEntity.notFound().build();
     }
 }

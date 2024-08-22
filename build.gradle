@@ -20,8 +20,8 @@ repositories {
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-data-jdbc'
 	implementation 'com.h2database:h2'
-//	disable spring security
-//	implementation 'org.springframework.boot:spring-boot-starter-security'
+//	disable spring security. Otherwise, it lock down api due to not authen and autho
+	implementation 'org.springframework.boot:spring-boot-starter-security'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 //	runtimeOnly 'com.h2database:h2'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
