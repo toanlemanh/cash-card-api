@@ -1,6 +1,10 @@
 package com.example.cash_card_api;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponents;
@@ -26,9 +30,15 @@ public class CashCardController {
 
     }
     @GetMapping("")
-    public ResponseEntity<Iterable<CashCard>> getAllCashCards(){
-        Iterable<CashCard> cashCards = cashCardRepository.findAll();
-        return ResponseEntity.ok(cashCards);
+    public ResponseEntity<Iterable<CashCard>> getAllCashCards(Pageable pageable){
+        Page<CashCard> cashCards = cashCardRepository.findAll(
+                PageRequest.of(
+                        pageable.getPageNumber(),
+                        pageable.getPageSize(),
+                        pageable.getSortOr(Sort.by(new Sort.Order(Sort.Direction.ASC, "amount")))
+                )
+        );
+        return ResponseEntity.ok(cashCards.getContent());
     }
 
     @PostMapping("/")
