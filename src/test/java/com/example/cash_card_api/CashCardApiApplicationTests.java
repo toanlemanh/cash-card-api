@@ -27,8 +27,11 @@ class CashCardApiApplicationTests {
 	}
 
 	@Test
-	void testGetCashCardApi (){
-		ResponseEntity<String> response = testRestTemplate.getForEntity("/cashcards/15", String.class );
+	void testGetCashCardByIdAndOwner (){
+		ResponseEntity<String> response = testRestTemplate
+				.withBasicAuth("toan", "123")
+				.getForEntity("/cashcards/15", String.class );
+
 		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
 
 		DocumentContext documentContext = JsonPath.parse(response.getBody());

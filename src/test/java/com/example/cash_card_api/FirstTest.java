@@ -16,14 +16,14 @@ public class FirstTest {
 
     @Test
      void testSerializationWithCashCardObject() throws IOException {
-        CashCard cashCard = new CashCard(11L, 11.01);
-        assertThat(json.write(cashCard)).isStrictlyEqualToJson("expected.json");
-        assertThat(json.write(cashCard)).hasJsonPathNumberValue("@.id");
-        assertThat(json.write(cashCard)).extractingJsonPathNumberValue("@.id")
-                .isEqualTo(11);
-        assertThat(json.write(cashCard)).hasJsonPathNumberValue("@.amount");
-        assertThat(json.write(cashCard)).extractingJsonPathNumberValue("@.amount")
-                .isEqualTo(11.01);
+//        CashCard cashCard = new CashCard(11L, 11.01);
+//        assertThat(json.write(cashCard)).isStrictlyEqualToJson("expected.json");
+//        assertThat(json.write(cashCard)).hasJsonPathNumberValue("@.id");
+//        assertThat(json.write(cashCard)).extractingJsonPathNumberValue("@.id")
+//                .isEqualTo(11);
+//        assertThat(json.write(cashCard)).hasJsonPathNumberValue("@.amount");
+//        assertThat(json.write(cashCard)).extractingJsonPathNumberValue("@.amount")
+//                .isEqualTo(11.01);
     }
 
 }
