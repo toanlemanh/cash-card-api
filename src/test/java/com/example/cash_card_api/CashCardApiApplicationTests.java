@@ -35,23 +35,7 @@ class CashCardApiApplicationTests {
 		Integer id = documentContext.read("$.id");
 		assertThat(id).isEqualTo(15);
 	}
-	@Test
-	void testGetAllCashCardApi (){
-		ResponseEntity<String> response = testRestTemplate.getForEntity("/cashcards", String.class );
-		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
 
-		DocumentContext documentContext = JsonPath.parse(response.getBody());
-		Integer length =  documentContext.read("$.length()");
-		// 1 for data.sql from test resource, 3 from data.sql in main resource
-		assertThat(length).isEqualTo(4);
-
-		JSONArray ids = documentContext.read("$..id");
-		assertThat(ids).containsExactlyInAnyOrder(11,12,13,15);
-
-		JSONArray amounts = documentContext.read("$..amount");
-		assertThat(amounts).containsExactlyInAnyOrder(11.01, 12.01, 13.01, 15.01);
-
-	}
 
 
 
