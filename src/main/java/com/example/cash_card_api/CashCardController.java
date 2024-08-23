@@ -59,4 +59,20 @@ public class CashCardController {
         }
        return ResponseEntity.notFound().build();
     }
+
+    //Do not allow to create a cash card by PUT method supplying id
+    // Only UPDATE or 404
+    @PutMapping("/{id}")
+    public ResponseEntity<Void> updateCashCardById (@PathVariable(value="id") Long id,
+                                                    @RequestBody CashCard cashCard,
+                                                    Principal principal){
+        Optional<CashCard> cashCardOptional = cashCardRepository.findByIdAndOwner(id, principal.getName());
+        if (cashCardOptional.isPresent()) {
+            //updating
+            cashCardRepository.save( new CashCard(id, cashCard.amount(), principal.getName()) );
+            return ResponseEntity.noContent().build();
+        }
+        //404
+        return ResponseEntity.notFound().build();
+    }
 }

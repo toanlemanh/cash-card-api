@@ -14,17 +14,17 @@ import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
 public class SecurityConfig {
-    /*
+    /**
      @Note:
-      Because in this course we follow test-driven approach (test first and not using non-browser testing)
-      so we doesn't need CSRF => disable
-     */
+      *Because in this course we follow test-driven approach (test first and not using non-browser testing)
+      *so we doesn't need CSRF => disable
+      */
     @Bean
     SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         return http
                 .authorizeHttpRequests(request -> request
                         .requestMatchers("/cashcards/**")
-                        .hasRole("user")
+                        .hasRole("user") //instead of authenticated() for all user
                 )
                 .httpBasic(Customizer.withDefaults())
                 .csrf(csrf->csrf.disable())
@@ -57,7 +57,7 @@ public class SecurityConfig {
                 .password(passwordEncoder.encode("123"))
                 .roles("customer")
                 .build();
-        return new InMemoryUserDetailsManager(toan123, amee123, jack123 );
+        return new InMemoryUserDetailsManager( toan123, amee123, jack123 );
     }
 
 
