@@ -27,7 +27,7 @@ public class PostTests {
     void testPostCashCard (){
         ResponseEntity<Void> response = testRestTemplate
                 .withBasicAuth("amee", "123")
-                .postForEntity("/cashcards/", new CashCard(null, 90.01, null),Void.class);
+                .postForEntity("/cashcards/", new CashCard(null, 90.01, null), Void.class);
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.CREATED);
 
